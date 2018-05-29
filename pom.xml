@@ -111,5 +111,12 @@
         <app.brake>0</app.brake>
       </properties>
     </profile>
+
+    <profile>
+      <id>openshift</id>
+      <properties>
+        <app.brake>0</app.brake>
+      </properties>
+    </profile>    
   </profiles>
 </project>
