@@ -125,7 +125,7 @@
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
     <div class="container">
-        <h1>Hello, welcome to OLD [${contextname}]</h1>
+        <h1>Hello, welcome to nuova [${contextname}]</h1>
 
         <h1>Release: ${appversion} </h1>
 
