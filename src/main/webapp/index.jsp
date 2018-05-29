@@ -9,23 +9,6 @@
          pageEncoding="UTF-8" %>
 
 <%
-    String text = "No Content";
-    ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-    InputStream input = classLoader.getResourceAsStream("speed.properties");
-    
-    try {
-        Properties properties = new Properties();
-        properties.load(input);
-        input.close();
-        text = (String) properties.get("app.brake");
-    } catch (FileNotFoundException e) {
-        e.printStackTrace();
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-    //System.out.println("Properties read: \n" + text);
-    
-    Thread.sleep(Integer.valueOf(text)); // sleep 5 seconds
 
     Object counterObj = session.getAttribute("counter");
     int counter = 0;
@@ -78,7 +61,7 @@
     <meta name="author" content="">
     <link rel="icon" href="/favicon.ico">
 
-    <title>App name[${contextname}] VERSION: ${appversion} page response delay ${text}</title>
+    <title>App name[${contextname}] VERSION: ${appversion}</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">

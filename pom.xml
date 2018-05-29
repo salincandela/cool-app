@@ -30,9 +30,6 @@
 
   <build>
     <outputDirectory>${basedir}/target/classes</outputDirectory>
-    <filters>
-      <filter>src/main/resources/speed.properties</filter>
-    </filters>
     <resources>
       <resource>
         <directory>src/main/webapp/WEB-INF</directory>
@@ -95,28 +92,4 @@
 
     <finalName>ROOT</finalName>
   </build>
-
-
-<profiles>
-    <profile>
-      <id>app-slow</id>
-      <properties>
-        <app.brake>200</app.brake>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>app-fast</id>
-      <properties>
-        <app.brake>0</app.brake>
-      </properties>
-    </profile>
-
-    <profile>
-      <id>openshift</id>
-      <properties>
-        <app.brake>0</app.brake>
-      </properties>
-    </profile>    
-  </profiles>
 </project>
