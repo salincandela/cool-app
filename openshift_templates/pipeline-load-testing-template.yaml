@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: deploy-to-test-pipeline-template
+  annotations:
+    description: "Template fot jmeter pipelien stages"
+    tags: "cicd,jnekins,pipeline,jmeter"
+objects:
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    name: deploy-to-test-${APPLICATION_NAME}
+    labels:
+      name: deploy-to-test-${APPLICATION_NAME}
+  spec:
+    strategy:
+      type: JenkinsPipeline
+      jenkinsPipelineStrategy:
+        jenkinsfile: |-
+          node ("maven") {
+            def mvnCmd = "mvn"
+            def pom
+            def newTarget
+            def currentTarget
+            stage('Checkout Source') {
+
+              git url: '${GIT_URL}'
+
+              def buildName = pom = readMavenPom file: 'pom.xml'
+              echo "${pom}"
+              version = pom.version
+              echo "${version}"
+              sh "git checkout -b ${buildName}"
+            }
+
+            stage('Build war') {
+              sh "${mvnCmd} clean compile -Dappversion=${version}"
+            }
+            
+            stage('Unit Tests') {
+              sh "${mvnCmd} test -Dappversion=${version}"
+            }
+
+            stage('Code Analysis') {
+              //sh "${mvnCmd} sonar:sonar -Dappversion=${version} -DskipTests=true -Dsonar.host.url=http://sonarqube-user16-cicd.example.openshift.com/"
+            }
+
+            stage('Package') {
+              sh "${mvnCmd} package -Dappversion=${version}"
+            }
+
+            stage('Deploy to Test Env') {
+              sh "oc start-build cool-app --from-file=./target/ROOT.war -n ${ENV_PREFIX}-test"
+              sh " oc tag ${ENV_PREFIX}-test/${APPLICATION_NAME}:latest cool-app:${version} -n ${ENV_PREFIX}-test"
+            }
+             
+          }
+parameters:
+- description: The application name
+  name: APPLICATION_NAME
+  value: cool-app
+  required: true
+- description: The application name
+  name: ENV_PREFIX
+  value: example
+  required: true  
+- description: Url of GIT repo
+  name: GIT_URL
+  required: true
+labels:
+  redis: master
